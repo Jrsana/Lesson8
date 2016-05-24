@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>HomeWork</title>
+    <style>
+        body{
+            min-height:3000px;
+            position: relative;
+        }
+        #back{
+            position: fixed;
+            top:50px;
+            right:50px;
+        }
+        #drag{
+            width:50px;
+            height:50px;
+            background: blue;
+            cursor: pointer;
+            position: absolute;
+        }
+        #moveDiv{
+            top: 200px;
+            position: relative;
+            width:70px;
+        }
+        #stop{
+            top: 250px;
+            position: relative;
+        }
+    </style>
+    <script>
+        window.addEventListener("load", function () {
+            var back = document.getElementById("back");
+            back.addEventListener("click", scrollTop);
+            function scrollTop() {
+                window.scrollTo(0, 0);
+            }
+
+            var drag = document.getElementById("drag");
+            drag.addEventListener("mousedown", dragAndDrop);
+            function dragAndDrop(e){
+
+                var startX = e.clientX, startY = e.clientY;
+                var origX = drag.offsetLeft, origY = drag.offsetTop;
+
+                // разница между координатами мыши и координатами перетаскиваемого элемента.
+
+                var deltaX = startX - origX;
+                var deltaY = startY - origY;
+
+                window.addEventListener("mousemove", moveHandler);
+                window.addEventListener("mouseup", upHandler);
+
+                function moveHandler(e) {
+                    drag.style.left = (e.clientX - deltaX) + "px";
+                    drag.style.top = (e.clientY - deltaY) + "px";
+                };
+
+                function upHandler(e) {
+                    window.removeEventListener("mouseup", upHandler);
+                    window.removeEventListener("mousemove", moveHandler);
+                };
+            }
+
+            var moveDiv = document.getElementById("moveDiv"),
+                    stopButton = document.getElementById("stop"),
+                    myVar = null,
+                     windowWidth = document.body.clientWidth;
+
+
+            moveDiv.addEventListener("click", moveRight);
+            var left = 0;
+
+            function moveRight(){
+                myVar = setTimeout(function(){
+                    left += 1;
+                    moveDiv.style.left = left + "px";
+
+                    if(left ===(windowWidth-moveDiv.clientWidth))
+                    {
+                        left = 0;
+                    }
+
+                    moveRight();
+                }, 10);
+            }
+            stopButton.addEventListener("click", stopMove);
+
+            function stopMove(){
+                clearTimeout(myVar);
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- back to top button; -->
+    <!-- drag; -->
+    <!-- создайте div, при клике на него, div начинает двигаться вправо, при клике на кнопку - останавливается, при попадании div к краю окна, он переходит к началу окна. -->
+
+    <button id="back">Back to top</button>
+
+    <div id="drag">
+        Drag and Drop
+    </div>
+
+    <div id="moveDiv">Move Div</div>
+    <button id="stop">Stop moving div</button>
+</body>
+</html>
